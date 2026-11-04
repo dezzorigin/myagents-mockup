@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — myagents</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root { --bg:#050505; --surface:#0a0a0a; --card:#111111;
+    --border:rgba(255,255,255,0.08); --t1:#fafafa; --t2:#a1a1aa; --t3:#52525b;
+    --btn-bg:#fafafa; --btn-tx:#000; --ok:#22c55e; --wait:#eab308; --run:#38bdf8; }
+  body.light { --bg:#f4f4f5; --surface:#ffffff; --card:#ffffff;
+    --border:rgba(0,0,0,0.09); --t1:#09090b; --t2:#52525b; --t3:#b0b0b8;
+    --btn-bg:#09090b; --btn-tx:#fff; }
+  body { background:var(--bg); color:var(--t1);
+    font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh; }
+  .wrap { max-width:960px; margin:0 auto; padding:110px 20px 90px; }
+  header { position:fixed; top:24px; left:50%; transform:translateX(-50%); z-index:40;
+    width:92%; max-width:760px; background:var(--surface);
+    border:1px solid var(--border); border-radius:9999px;
+    padding:10px 22px; display:flex; align-items:center; justify-content:space-between; }
+  .brand { display:flex; align-items:center; gap:8px; font-weight:800; font-size:14px; }
+  .brand-dot { width:26px; height:26px; border-radius:50%; background:var(--btn-bg); color:var(--btn-tx);
+    display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; }
+  nav.links { display:flex; gap:4px; }
+  nav.links a { color:var(--t2); text-decoration:none; font-size:13px; font-weight:500; padding:6px 12px; border-radius:8px; }
+  nav.links a.active { color:var(--t1); background:var(--border); border-radius:9999px; font-weight:600; }
+  .icon-btn { background:transparent; border:1px solid var(--border); color:var(--t2);
+    border-radius:50%; width:36px; height:36px; cursor:pointer; font-size:15px; }
+  .quota { background:var(--surface); border:1px solid var(--border); border-radius:22px; padding:20px 22px;
+    display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .quota .info b { font-size:16px; display:block; }
+  .quota .info span { color:var(--t2); font-size:13px; }
+  .bar { flex:1; min-width:160px; height:10px; border-radius:9999px; background:var(--border); overflow:hidden; }
+  .bar i { display:block; height:100%; width:35%; background:var(--t1); border-radius:9999px; }
+  .btn { background:var(--btn-bg); color:var(--btn-tx); border:0; border-radius:9999px;
+    font-weight:700; font-size:13px; padding:10px 22px; cursor:pointer; text-decoration:none; }
+  .tabs { display:flex; gap:8px; margin:22px 0 14px; flex-wrap:wrap; }
+  .tabs button { background:transparent; border:1px solid var(--border); color:var(--t2);
+    font-size:13px; font-weight:600; padding:9px 18px; border-radius:9999px; cursor:pointer; }
+  .tabs button.sel { background:var(--t1); color:var(--bg); border-color:var(--t1); }
+  .cols { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .col h3 { font-size:12px; color:var(--t3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px; margin-bottom:10px; }
+  .card b { font-size:13.5px; display:block; line-height:1.4; }
+  .card .co { color:var(--t2); font-size:12px; margin-top:3px; }
+  .card .row { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+  .pill { font-size:11px; font-weight:700; padding:4px 10px; border-radius:9999px; }
+  .p-auto { background:rgba(34,197,94,.12); color:var(--ok); }
+  .p-klik { background:rgba(234,179,8,.12); color:var(--wait); }
+  .score { font-size:13px; font-weight:800; }
+  .card button { margin-top:10px; width:100%; background:transparent; border:1px solid var(--border);
+    color:var(--t1); font-size:12.5px; font-weight:600; padding:8px; border-radius:12px; cursor:pointer; }
+  .note { margin-top:18px; background:var(--surface); border:1px solid var(--border);
+    border-radius:18px; padding:18px 20px; font-size:13.5px; color:var(--t2); line-height:1.65; }
+  .note b { color:var(--t1); }
+  footer { margin-top:40px; text-align:center; color:var(--t3); font-size:12px; }
+  @media (max-width:760px) { nav.links { display:none; } .cols { grid-template-columns:1fr 1fr; } }
+  @media (max-width:480px) { .cols { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="brand-dot">m</div>myagents</div>
+  <nav class="links"><a href="mockup-landing.html">Beranda</a><a href="#" class="active">Lamaran</a><a href="#">Cari baru</a><a href="#">Paket</a></nav>
+  <button class="icon-btn" id="themeBtn">&#9790;</button>
+</header>
+<div class="wrap">
+  <div class="quota">
+    <div class="info"><b>Paket Coba &middot; 7 dari 20 lamaran</b><span>Berlaku sampai 2 Nov 2026 &middot; sisa 13 lamaran</span></div>
+    <div class="bar"><i></i></div>
+    <a class="btn" href="#">Tambah via WA</a>
+  </div>
+
+  <div class="tabs">
+    <button class="sel">Semua (12)</button><button>Antre (3)</button><button>Dikerjakan (2)</button><button>Terkirim (6)</button><button>Panggilan (1)</button>
+  </div>
+
+  <div class="cols">
+    <div class="col"><h3>Antre</h3>
+      <div class="card"><b>Admin Gudang</b><div class="co">CV Sinar Abadi &middot; Cimahi</div>
+        <div class="row"><span class="pill p-auto">Otomatis</span><span class="score">4,2</span></div></div>
+      <div class="card"><b>Staff Data Entry</b><div class="co">PT Artha Logistik &middot; Bandung</div>
+        <div class="row"><span class="pill p-auto">Otomatis</span><span class="score">4,0</span></div></div>
+      <div class="card"><b>Frontliner Bank</b><div class="co">Bank Nusantara &middot; LinkedIn</div>
+        <div class="row"><span class="pill p-klik">1-klik</span><span class="score">3,9</span></div>
+        <button>Buka halaman apply</button></div>
+    </div>
+    <div class="col"><h3>Dikerjakan</h3>
+      <div class="card"><b>CS Online Shop</b><div class="co">PT Cahaya Digital &middot; Remote</div>
+        <div class="row"><span class="pill p-auto">Otomatis</span><span class="score">4,4</span></div></div>
+      <div class="card"><b>Resepsionis Klinik</b><div class="co">Klinik Sehat Qolbu &middot; Bandung</div>
+        <div class="row"><span class="pill p-auto">Otomatis</span><span class="score">4,1</span></div></div>
+    </div>
+    <div class="col"><h3>Terkirim</h3>
+      <div class="card"><b>Staff Administrasi</b><div class="co">PT Maju Bersama &middot; Email HRD</div>
+        <div class="row"><span class="pill p-auto">Otomatis</span><span class="score">4,6</span></div></div>
+      <div class="card"><b>Admin Produksi</b><div class="co">PT Sinar Jaya &middot; Form perusahaan</div>
+        <div class="row"><span class="pill p-auto">Otomatis</span><span class="score">4,3</span></div></div>
+    </div>
+    <div class="col"><h3>Panggilan</h3>
+      <div class="card"><b>Staff Administrasi</b><div class="co">PT Maju Bersama &middot; interview Senin 10.00</div>
+        <div class="row"><span class="pill p-auto">Otomatis</span><span class="score">4,6</span></div>
+        <button>Siapkan interview</button></div>
+    </div>
+  </div>
+
+  <div class="note"><b>Mode malam ini: otomatis.</b> Worker mengerjakan antrean pukul 20.00-23.00. Ringkasan masuk WhatsApp-mu tiap pagi. Lowongan berlabel <b>1-klik</b> butuh satu ketukan darimu di aplikasi portal HP-mu. Punya 50 lowongan cocok tapi kuota 20? Pilih sendiri baris mana yang mau dikirim.</div>
+  <footer>myagents &middot; myagenst.id</footer>
+</div>
+<script>
+  document.getElementById("themeBtn").onclick = function(){
+    var l = document.body.classList.toggle("light"); this.innerHTML = l ? "&#9788;" : "&#9790;";
+  };
+  document.querySelectorAll(".tabs button").forEach(function(b){
+    b.onclick = function(){
+      document.querySelectorAll(".tabs button").forEach(function(x){ x.classList.remove("sel"); });
+      b.classList.add("sel");
+    };
+  });
+</script>
+</body>
+</html>

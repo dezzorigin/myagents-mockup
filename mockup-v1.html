@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>myagents — Sekpri Digital Pencari Kerja</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background-color:#050505;
+    background-image:
+      radial-gradient(at 50% 0%, rgba(255,255,255,0.03) 0px, transparent 50%),
+      linear-gradient(rgba(255,255,255,0.005) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.005) 1px, transparent 1px);
+    background-size:100% 100%, 40px 40px, 40px 40px;
+    background-attachment:fixed;
+    color:#fafafa;
+    font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh;
+  }
+  .wrap { max-width:880px; margin:0 auto; padding:0 20px 80px; }
+  /* floating pill nav */
+  header {
+    position:fixed; top:24px; left:50%; transform:translateX(-50%);
+    z-index:40; width:92%; max-width:720px;
+    background:rgba(255,255,255,0.03);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,0.08); border-radius:9999px;
+    padding:10px 24px; display:flex; align-items:center; justify-content:space-between;
+    box-shadow:0 12px 40px rgba(0,0,0,0.6);
+  }
+  .brand { display:flex; align-items:center; gap:8px; font-weight:800; font-size:14px; letter-spacing:.02em; }
+  .brand-dot { width:26px; height:26px; border-radius:50%; background:#fafafa; color:#000;
+    display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; }
+  nav.links { display:flex; gap:4px; align-items:center; }
+  nav.links a { color:#a1a1aa; text-decoration:none; font-size:13px; font-weight:500;
+    padding:6px 12px; border-radius:8px; }
+  nav.links a:hover { color:#fff; background:rgba(255,255,255,0.05); }
+  nav.links a.active { color:#fff; background:rgba(255,255,255,0.10); border-radius:9999px; font-weight:600; }
+  .btn-masuk { background:#fafafa; color:#000; border:0; border-radius:9999px;
+    font-weight:700; font-size:13px; padding:8px 18px; cursor:pointer; }
+  /* hero */
+  .hero { text-align:center; padding:150px 0 28px; }
+  .hero h1 { font-size:clamp(38px,7vw,68px); font-weight:800; letter-spacing:-0.04em; line-height:1.05; }
+  .hero p { color:#a1a1aa; max-width:560px; margin:18px auto 0; font-size:16px; line-height:1.6; }
+  .badge-row { display:flex; gap:8px; justify-content:center; margin-top:18px; flex-wrap:wrap; }
+  .badge { font-size:12px; color:#a1a1aa; border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.02); padding:6px 14px; border-radius:9999px; }
+  /* chat pill */
+  .chat-pill {
+    margin-top:28px; background:rgba(255,255,255,0.03);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,0.08); border-radius:32px; padding:10px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);
+    transition:border-color .3s, box-shadow .3s;
+  }
+  .chat-pill:focus-within { border-color:rgba(255,255,255,0.25); box-shadow:0 0 25px rgba(255,255,255,0.06); }
+  .chat-row { display:flex; gap:8px; align-items:center; }
+  .chat-row input {
+    flex:1; background:transparent; border:0; outline:0; color:#fafafa;
+    font-size:15px; padding:14px 18px; min-width:0;
+  }
+  .chat-row input::placeholder { color:#52525b; }
+  .icon-btn { background:transparent; border:1px solid rgba(255,255,255,0.10); color:#a1a1aa;
+    border-radius:50%; width:44px; height:44px; cursor:pointer; font-size:17px; flex-shrink:0; }
+  .icon-btn:hover { color:#fff; border-color:rgba(255,255,255,0.2); }
+  .send-btn { background:#fafafa; color:#000; border:0; border-radius:9999px;
+    font-weight:700; font-size:14px; padding:13px 26px; cursor:pointer; flex-shrink:0; }
+  .chips { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; justify-content:center; }
+  .chips button { background:transparent; border:1px solid rgba(255,255,255,0.08); color:#a1a1aa;
+    font-size:12.5px; padding:7px 14px; border-radius:9999px; cursor:pointer; }
+  .chips button:hover { color:#fff; border-color:rgba(255,255,255,0.2); }
+  /* marquee */
+  .marquee-mask { overflow:hidden; margin-top:34px;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); }
+  .marquee { display:flex; width:max-content; animation:slide 30s linear infinite; gap:12px; }
+  @keyframes slide { to { transform:translateX(-50%); } }
+  .portal { border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02);
+    color:#a1a1aa; font-size:13px; font-weight:600; padding:9px 20px; border-radius:9999px; white-space:nowrap; }
+  /* chat log */
+  #log { margin-top:26px; display:flex; flex-direction:column; gap:12px; }
+  .msg { max-width:85%; padding:13px 18px; border-radius:20px; font-size:14.5px; line-height:1.55; }
+  .msg.user { align-self:flex-end; background:#fafafa; color:#000; border-bottom-right-radius:6px; font-weight:500; }
+  .msg.agent { align-self:flex-start; background:#111; border:1px solid rgba(255,255,255,0.08);
+    border-bottom-left-radius:6px; color:#e4e4e7; }
+  .msg.agent .meta { display:block; font-size:11.5px; color:#52525b; margin-bottom:6px; }
+  .typing { color:#52525b; font-size:13px; align-self:flex-start; }
+  /* job cards */
+  .jobs { margin-top:34px; display:flex; flex-direction:column; gap:14px; }
+  .jobs h2 { font-size:20px; font-weight:700; letter-spacing:-0.02em; }
+  .jobs .sub { color:#52525b; font-size:13px; margin-top:-8px; }
+  .job {
+    background:rgba(255,255,255,0.02); backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.07); border-radius:24px; padding:20px 22px;
+    display:flex; gap:16px; align-items:flex-start; transition:all .3s;
+  }
+  .job:hover { box-shadow:0 0 25px rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.15); }
+  .logo { width:46px; height:46px; border-radius:14px; background:#1c1c1f; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fafafa; }
+  .job-body { flex:1; min-width:0; }
+  .job-body h3 { font-size:15.5px; font-weight:700; }
+  .job-body .co { color:#a1a1aa; font-size:13px; margin-top:2px; }
+  .tags { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+  .tags span { font-size:11.5px; color:#a1a1aa; background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.07); padding:4px 10px; border-radius:9999px; }
+  .score { flex-shrink:0; text-align:center; }
+  .score b { display:block; font-size:22px; }
+  .score small { color:#52525b; font-size:11px; }
+  .job-actions { display:flex; gap:8px; margin-top:12px; }
+  .btn-outline { background:transparent; border:1px solid rgba(255,255,255,0.14); color:#fafafa;
+    font-size:13px; font-weight:600; padding:9px 18px; border-radius:9999px; cursor:pointer; }
+  .btn-outline:hover { background:rgba(255,255,255,0.07); }
+  .btn-solid { background:#fafafa; border:0; color:#000;
+    font-size:13px; font-weight:700; padding:9px 18px; border-radius:9999px; cursor:pointer; }
+  /* mode toggle */
+  .modes { margin-top:34px; background:#0a0a0a; border:1px solid rgba(255,255,255,0.07);
+    border-radius:24px; padding:22px; }
+  .modes h2 { font-size:17px; font-weight:700; }
+  .modes p { color:#a1a1aa; font-size:13.5px; margin-top:6px; line-height:1.6; }
+  .mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+  .mode { border:1px solid rgba(255,255,255,0.08); border-radius:18px; padding:16px; cursor:pointer; }
+  .mode.sel { border-color:rgba(255,255,255,0.3); background:rgba(255,255,255,0.03); }
+  .mode b { font-size:14px; display:block; }
+  .mode span { color:#a1a1aa; font-size:12.5px; display:block; margin-top:6px; line-height:1.55; }
+  /* pricing + wa */
+  .pricing { margin-top:34px; text-align:center; }
+  .pricing h2 { font-size:22px; font-weight:800; letter-spacing:-0.02em; }
+  .price-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px; text-align:left; }
+  .price { background:#0a0a0a; border:1px solid rgba(255,255,255,0.07); border-radius:24px; padding:22px; }
+  .price.hot { border-color:rgba(255,255,255,0.25); }
+  .price b { font-size:15px; }
+  .price .rp { font-size:26px; font-weight:800; margin:8px 0 2px; }
+  .price ul { list-style:none; margin-top:12px; }
+  .price li { color:#a1a1aa; font-size:13px; padding:5px 0; border-top:1px solid rgba(255,255,255,0.05); }
+  .wa-btn { display:inline-block; margin-top:20px; background:#fafafa; color:#000; font-weight:700;
+    font-size:14px; padding:13px 30px; border-radius:9999px; text-decoration:none; }
+  footer { margin-top:50px; text-align:center; color:#52525b; font-size:12px; }
+  body.light { background-color:#f4f4f5; color:#09090b;
+    background-image:radial-gradient(at 50% 0%, rgba(0,0,0,0.04) 0px, transparent 50%); }
+  body.light header, body.light .chat-pill { background:rgba(255,255,255,0.7); border-color:rgba(0,0,0,0.08); }
+  body.light .brand-dot { background:#09090b; color:#fff; }
+  body.light nav.links a { color:#52525b; }
+  body.light nav.links a:hover { color:#000; background:rgba(0,0,0,0.05); }
+  body.light nav.links a.active { color:#000; background:rgba(0,0,0,0.08); }
+  body.light .btn-masuk, body.light .send-btn, body.light .btn-solid, body.light .wa-btn { background:#09090b; color:#fff; }
+  body.light .hero p, body.light .badge, body.light .portal, body.light .mode span, body.light .price li { color:#52525b; }
+  body.light .badge, body.light .portal, body.light .chips button { border-color:rgba(0,0,0,0.12); }
+  body.light .chips button:hover { color:#000; border-color:rgba(0,0,0,0.3); }
+  body.light .msg.agent { background:#fff; border-color:rgba(0,0,0,0.08); color:#27272a; }
+  body.light .msg.user { background:#09090b; color:#fff; }
+  body.light .job, body.light .modes, body.light .price { background:#fff; border-color:rgba(0,0,0,0.08); }
+  body.light .logo { background:#e4e4e7; color:#09090b; }
+  body.light .job-body .co, body.light .jobs .sub, body.light .modes p, body.light .score small { color:#71717a; }
+  body.light .tags span { background:rgba(0,0,0,0.04); border-color:rgba(0,0,0,0.08); color:#52525b; }
+  body.light .btn-outline { border-color:rgba(0,0,0,0.2); color:#09090b; }
+  body.light .mode.sel { border-color:rgba(0,0,0,0.35); background:rgba(0,0,0,0.03); }
+  body.light .price.hot { border-color:rgba(0,0,0,0.3); }
+  body.light .icon-btn { border-color:rgba(0,0,0,0.15); color:#52525b; }
+  body.light .chat-row input { color:#09090b; }
+  @media (max-width:640px) {
+    nav.links a:not(.active) { display:none; }
+    .mode-grid, .price-cards { grid-template-columns:1fr; }
+    .send-btn { padding:13px 18px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="brand-dot">m</div>myagents</div>
+  <nav class="links">
+    <a href="#" class="active">Beranda</a>
+    <a href="#hasil">Lowongan</a>
+    <a href="#">Lamaran</a>
+    <a href="#harga">Harga</a>
+  </nav>
+  <div style="display:flex;gap:8px;align-items:center"><button class="icon-btn" id="themeBtn" title="Mode terang/gelap" style="width:36px;height:36px;font-size:15px">&#9790;</button><button class="btn-masuk">Masuk</button></div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <h1>Unggah CV sekali.<br>Biar agen yang melamar.</h1>
+    <p>myagents adalah sekpri digital pencari kerja. Tulis maumu dengan bahasa sehari-hari, agen mencari lowongan yang cocok dan melamarkan memakai CV kamu apa adanya ke JobStreet, Glints, dan LinkedIn.</p>
+    <div class="badge-row">
+      <span class="badge">JobStreet</span>
+      <span class="badge">Glints</span>
+      <span class="badge">LinkedIn Indonesia</span>
+    </div>
+
+    <div class="chat-pill">
+      <div class="chat-row">
+        <input id="chat" type="text" placeholder='Contoh: carikan kerja admin di Bandung, gaji minimal 5 juta' autocomplete="off">
+        <button class="icon-btn" id="cvBtn" title="Unggah CV">&#128206;</button>
+        <button class="send-btn" id="send">Kirim</button>
+      </div>
+    </div>
+    <div class="chips">
+      <button data-q="Carikan kerja admin di Bandung, gaji minimal 5 juta">Admin Bandung 5jt</button>
+      <button data-q="Carikan kerja desainer, boleh remote">Desainer remote</button>
+      <button data-q="Carikan kerja driver di Jakarta">Driver Jakarta</button>
+    </div>
+
+    <div class="marquee-mask">
+      <div class="marquee" id="marquee"></div>
+    </div>
+
+    <div id="log"></div>
+  </section>
+
+  <section class="jobs" id="hasil">
+    <h2>Hasil pencarian agen</h2>
+    <div class="sub">Contoh tampilan. Nama perusahaan gratis terlihat. Tombol Lamar dan auto-blast yang berbayar.</div>
+
+    <div class="job">
+      <div class="logo">A</div>
+      <div class="job-body">
+        <h3>Staff Administrasi</h3>
+        <div class="co">PT Maju Bersama &middot; Bandung &middot; Rp5&ndash;6,5 jt</div>
+        <div class="tags"><span>JobStreet</span><span>Full-time</span><span>Min. SMA</span><span>Excel</span></div>
+        <div class="job-actions">
+          <button class="btn-outline">Lihat detail</button>
+          <button class="btn-solid">Lamar</button>
+        </div>
+      </div>
+      <div class="score"><b>4.6</b><small>skor cocok</small></div>
+    </div>
+
+    <div class="job">
+      <div class="logo">G</div>
+      <div class="job-body">
+        <h3>Admin Gudang</h3>
+        <div class="co">CV Sinar Abadi &middot; Cimahi &middot; Rp4,8&ndash;5,5 jt</div>
+        <div class="tags"><span>Glints</span><span>Full-time</span><span>Shift pagi</span></div>
+        <div class="job-actions">
+          <button class="btn-outline">Lihat detail</button>
+          <button class="btn-solid">Lamar</button>
+        </div>
+      </div>
+      <div class="score"><b>4.2</b><small>skor cocok</small></div>
+    </div>
+
+    <div class="job">
+      <div class="logo">L</div>
+      <div class="job-body">
+        <h3>Customer Service Online</h3>
+        <div class="co">PT Cahaya Digital &middot; Remote &middot; Rp5&ndash;7 jt</div>
+        <div class="tags"><span>LinkedIn</span><span>Remote</span><span>Chat + telepon</span></div>
+        <div class="job-actions">
+          <button class="btn-outline">Lihat detail</button>
+          <button class="btn-solid">Lamar</button>
+        </div>
+      </div>
+      <div class="score"><b>3.8</b><small>skor cocok</small></div>
+    </div>
+  </section>
+
+  <section class="modes">
+    <h2>Dua cara melamar</h2>
+    <p>Pilih per lamaran. Semi-otomatis aman untuk akun portalmu. Auto-blast cepat tapi ada risiko akun dibatasi portal, jadi ada batas harian.</p>
+    <div class="mode-grid">
+      <div class="mode sel" onclick="this.classList.add('sel');this.nextElementSibling.classList.remove('sel')">
+        <b>Semi-otomatis (disarankan)</b>
+        <span>Agen menyiapkan CV dan semua isian. Kamu periksa, lalu tekan Submit sendiri.</span>
+      </div>
+      <div class="mode" onclick="this.classList.add('sel');this.previousElementSibling.classList.remove('sel')">
+        <b>Auto-blast penuh</b>
+        <span>Agen melamar sendiri ke semua yang skornya di atas batasmu. Maksimal 20 lamaran per hari per portal.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing" id="harga">
+    <h2>Harga</h2>
+    <div class="price-cards">
+      <div class="price">
+        <b>Gratis (draf diskusi)</b>
+        <div class="rp">Rp0</div>
+        <ul>
+          <li>10 lamaran pertama, full power</li>
+          <li>Semua portal terbuka</li>
+          <li>3x coba auto-blast</li>
+          <li>Progress dan skor terlihat penuh</li>
+        </ul>
+      </div>
+      <div class="price hot">
+        <b>Penuh</b>
+        <div class="rp">Rp49rb<span style="font-size:13px;color:#a1a1aa">/bln</span></div>
+        <ul>
+          <li>Lamaran tanpa batas wajar</li>
+          <li>Semua portal</li>
+          <li>CV kamu dipakai apa adanya</li>
+          <li>Mode auto-blast</li>
+        </ul>
+      </div>
+    </div>
+    <a class="wa-btn" href="#">Aktifasi via WhatsApp</a>
+  </section>
+
+  <section class="modes">
+    <h2>Contoh sheet bayar (muncul saat tekan Lamar)</h2>
+    <p>Ini yang dilihat user gratis saat jarinya menekan aksi berbayar. Satu kalimat, tiga pilihan, bayar via WhatsApp.</p>
+    <div class="mode-grid">
+      <div class="mode sel">
+        <b>Paket Coba Rp25rb</b>
+        <span>20 lamaran, 30 hari. Cukup untuk merasakan panggilan pertama.</span>
+      </div>
+      <div class="mode">
+        <b>Bulanan Rp49rb</b>
+        <span>100 lamaran per bulan + auto-blast. Untuk yang serius.</span>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:16px"><a class="wa-btn" href="#" style="margin-top:0">Bayar via WhatsApp</a></div>
+  </section>
+
+  <footer>myagents &middot; myagenst.id &middot; Sekpri digital pencari kerja</footer>
+</div>
+
+<script>
+  var portals = ["JobStreet","Glints","LinkedIn","Kalibrr","Jobindo","Karir.com","Urbanhire","Pintarnya"];
+  var m = document.getElementById("marquee"), html = "";
+  for (var r = 0; r < 2; r++) portals.forEach(function(p){ html += '<span class="portal">'+p+'</span>'; });
+  m.innerHTML = html;
+
+  var log = document.getElementById("log"), input = document.getElementById("chat");
+  function addMsg(text, who, meta) {
+    var d = document.createElement("div");
+    d.className = "msg " + who;
+    if (meta) { var s = document.createElement("span"); s.className = "meta"; s.textContent = meta; d.appendChild(s); }
+    d.appendChild(document.createTextNode(text));
+    log.appendChild(d);
+    d.scrollIntoView({behavior:"smooth", block:"nearest"});
+  }
+  function askMode(q) {
+    var t = document.createElement("div");
+    t.className = "typing"; t.textContent = "Agen sedang mencari...";
+    log.appendChild(t);
+    setTimeout(function(){
+      t.remove();
+      addMsg("Ketemu 12 lowongan yang cocok dengan: \""+q+"\". Sebelum saya melamar, pilih cara kerjanya:", "agent", "myagents");
+      var row = document.createElement("div");
+      row.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;align-self:flex-start";
+      var b1 = document.createElement("button"); b1.className = "btn-outline"; b1.textContent = "Cek satu per satu";
+      var b2 = document.createElement("button"); b2.className = "btn-solid"; b2.textContent = "Otomatis semua";
+      b1.onclick = function(){ row.remove(); addMsg("Cek satu per satu", "user"); doneManual(); };
+      b2.onclick = function(){ row.remove(); addMsg("Otomatis semua", "user"); doneAuto(); };
+      row.appendChild(b1); row.appendChild(b2); log.appendChild(row);
+      row.scrollIntoView({behavior:"smooth", block:"nearest"});
+    }, 1400);
+  }
+  function doneManual() {
+    addMsg("Siap. Saya tampilkan dari skor tertinggi. Kamu tekan Lamar per lowongan, saya yang mengisi semuanya.", "agent", "myagents");
+    document.getElementById("hasil").scrollIntoView({behavior:"smooth"});
+  }
+  function doneAuto() {
+    addMsg("Siap. Saya melamar otomatis ke yang skornya di atas 4,0, maksimal 20 per hari. Progresnya bisa dipantau di halaman Lamaran.", "agent", "myagents");
+    document.getElementById("hasil").scrollIntoView({behavior:"smooth"});
+  }
+  document.getElementById("send").onclick = function(){
+    var q = input.value.trim(); if(!q) return;
+    addMsg(q, "user"); input.value = ""; askMode(q);
+  };
+  input.addEventListener("keydown", function(e){ if(e.key === "Enter") document.getElementById("send").click(); });
+  document.querySelectorAll(".chips button").forEach(function(b){
+    b.onclick = function(){ input.value = b.getAttribute("data-q"); document.getElementById("send").click(); };
+  });
+  document.getElementById("themeBtn").onclick = function(){
+    var light = document.body.classList.toggle("light");
+    this.innerHTML = light ? "&#9788;" : "&#9790;";
+  };
+  document.getElementById("cvBtn").onclick = function(){
+    addMsg("Fungsi unggah CV aktif setelah login. Pada mockup ini tombolnya hanya ilustrasi.", "agent", "myagents");
+  };
+</script>
+</body>
+</html>

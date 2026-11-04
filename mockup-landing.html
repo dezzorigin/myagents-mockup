@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>myagents — Sekpri Digital Pencari Kerja</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg:#050505; --surface:#0a0a0a; --card:#111111;
+    --border:rgba(255,255,255,0.08); --t1:#fafafa; --t2:#a1a1aa; --t3:#52525b;
+    --btn-bg:#fafafa; --btn-tx:#000;
+    --grid:linear-gradient(rgba(255,255,255,0.005) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.005) 1px, transparent 1px);
+  }
+  body.light {
+    --bg:#f4f4f5; --surface:#ffffff; --card:#ffffff;
+    --border:rgba(0,0,0,0.09); --t1:#09090b; --t2:#52525b; --t3:#b0b0b8;
+    --btn-bg:#09090b; --btn-tx:#fff;
+    --grid:linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+  }
+  body { background:var(--bg); color:var(--t1);
+    background-image:radial-gradient(at 50% 0%, rgba(128,128,128,0.06) 0px, transparent 50%), var(--grid);
+    background-size:100% 100%, 40px 40px, 40px 40px; background-attachment:fixed;
+    font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 20px 90px; }
+  header { position:fixed; top:24px; left:50%; transform:translateX(-50%); z-index:40;
+    width:92%; max-width:760px; background:color-mix(in srgb, var(--surface) 72%, transparent);
+    backdrop-filter:blur(12px); border:1px solid var(--border); border-radius:9999px;
+    padding:10px 22px; display:flex; align-items:center; justify-content:space-between;
+    box-shadow:0 12px 40px rgba(0,0,0,0.35); }
+  .brand { display:flex; align-items:center; gap:8px; font-weight:800; font-size:14px; }
+  .brand-dot { width:26px; height:26px; border-radius:50%; background:var(--btn-bg); color:var(--btn-tx);
+    display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; }
+  nav.links { display:flex; gap:4px; }
+  nav.links a { color:var(--t2); text-decoration:none; font-size:13px; font-weight:500; padding:6px 12px; border-radius:8px; }
+  nav.links a:hover { color:var(--t1); }
+  .hbtns { display:flex; gap:8px; align-items:center; }
+  .icon-btn { background:transparent; border:1px solid var(--border); color:var(--t2);
+    border-radius:50%; width:36px; height:36px; cursor:pointer; font-size:15px; }
+  .btn { background:var(--btn-bg); color:var(--btn-tx); border:0; border-radius:9999px;
+    font-weight:700; font-size:13px; padding:9px 20px; cursor:pointer; text-decoration:none; display:inline-block; }
+  .btn-ghost { background:transparent; border:1px solid var(--border); color:var(--t1);
+    border-radius:9999px; font-weight:600; font-size:13px; padding:9px 20px; cursor:pointer; text-decoration:none; display:inline-block; }
+  .hero { text-align:center; padding:160px 0 20px; }
+  .live { display:inline-flex; align-items:center; gap:8px; font-size:12.5px; color:var(--t2);
+    border:1px solid var(--border); border-radius:9999px; padding:7px 16px; background:var(--surface); }
+  .dot { width:8px; height:8px; border-radius:50%; background:#22c55e; }
+  .hero h1 { font-size:clamp(38px,7vw,68px); font-weight:800; letter-spacing:-0.04em; line-height:1.05; margin-top:22px; }
+  .hero p { color:var(--t2); max-width:600px; margin:18px auto 0; font-size:16px; line-height:1.65; }
+  .cta-row { display:flex; gap:10px; justify-content:center; margin-top:26px; flex-wrap:wrap; }
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:34px; }
+  .stat { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:20px; }
+  .stat b { font-size:26px; font-weight:800; display:block; }
+  .stat span { color:var(--t2); font-size:12.5px; display:block; margin-top:4px; }
+  section.block { margin-top:64px; }
+  section.block h2 { font-size:24px; font-weight:800; letter-spacing:-0.02em; text-align:center; }
+  section.block .lede { color:var(--t2); font-size:14px; text-align:center; margin-top:8px; }
+  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:24px; }
+  .step { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; }
+  .step .n { font-size:12px; color:var(--t3); font-weight:700; }
+  .step b { display:block; font-size:15px; margin-top:6px; }
+  .step p { color:var(--t2); font-size:13px; margin-top:8px; line-height:1.6; }
+  .chat-pill { margin-top:26px; background:var(--surface); border:1px solid var(--border);
+    border-radius:32px; padding:10px; }
+  .chat-row { display:flex; gap:8px; align-items:center; }
+  .chat-row input { flex:1; background:transparent; border:0; outline:0; color:var(--t1);
+    font-size:15px; padding:14px 18px; min-width:0; }
+  .chat-row input::placeholder { color:var(--t3); }
+  .send-btn { background:var(--btn-bg); color:var(--btn-tx); border:0; border-radius:9999px;
+    font-weight:700; font-size:14px; padding:13px 26px; cursor:pointer; }
+  .proof { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:24px; }
+  .shot { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; }
+  .shot .cap { font-size:12px; color:var(--t3); font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+  .shot .big { font-size:20px; font-weight:800; margin-top:8px; }
+  .shot p { color:var(--t2); font-size:13px; margin-top:8px; line-height:1.6; }
+  .bar { height:8px; border-radius:9999px; background:var(--border); margin-top:12px; overflow:hidden; }
+  .bar i { display:block; height:100%; width:70%; background:var(--t1); border-radius:9999px; }
+  .marquee-mask { overflow:hidden; margin-top:26px;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); }
+  .marquee { display:flex; width:max-content; animation:slide 28s linear infinite; gap:12px; }
+  @keyframes slide { to { transform:translateX(-50%); } }
+  .portal { border:1px solid var(--border); background:var(--surface); color:var(--t2);
+    font-size:13px; font-weight:600; padding:9px 20px; border-radius:9999px; white-space:nowrap; }
+  .price-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:24px; }
+  .price { background:var(--surface); border:1px solid var(--border); border-radius:22px; padding:24px; }
+  .price.hot { border-color:var(--t1); }
+  .price b { font-size:14px; }
+  .price .rp { font-size:26px; font-weight:800; margin:8px 0 2px; }
+  .price .rp span { font-size:12px; color:var(--t2); font-weight:500; }
+  .price ul { list-style:none; margin-top:12px; }
+  .price li { color:var(--t2); font-size:13px; padding:6px 0; border-top:1px solid var(--border); }
+  .faq { margin-top:20px; display:flex; flex-direction:column; gap:10px; }
+  .qa { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px 20px; }
+  .qa b { font-size:14px; display:block; }
+  .qa p { color:var(--t2); font-size:13px; margin-top:6px; line-height:1.6; }
+  footer { margin-top:60px; text-align:center; color:var(--t3); font-size:12px; }
+  @media (max-width:640px) {
+    nav.links { display:none; }
+    .stats, .steps, .proof, .price-cards { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="brand-dot">m</div>myagents</div>
+  <nav class="links"><a href="#">Beranda</a><a href="#">Cara kerja</a><a href="#">Harga</a><a href="#">Testimoni</a></nav>
+  <div class="hbtns"><button class="icon-btn" id="themeBtn">&#9790;</button><a class="btn" href="mockup-dashboard.html">Masuk</a></div>
+</header>
+<div class="wrap">
+  <section class="hero">
+    <span class="live"><span class="dot"></span><span id="liveCount">1.284 lamaran terkirim minggu ini</span></span>
+    <h1>Unggah CV sekali.<br>Biar agen yang melamar.</h1>
+    <p>Sekpri digital untuk fresh graduate. Tulis maumu dengan bahasa sehari-hari, agen mencari lowongan yang cocok di JobStreet, Glints, dan LinkedIn, lalu melamarkan memakai CV kamu apa adanya.</p>
+    <div class="cta-row"><a class="btn" href="mockup-dashboard.html">Coba cari lowongan gratis</a><a class="btn-ghost" href="#">Lihat cara kerja</a></div>
+    <div class="stats">
+      <div class="stat"><b>14</b><span>lowongan cocok per pencarian (rata-rata)</span></div>
+      <div class="stat"><b>8 mnt</b><span>dari chat pertama ke lamaran terkirim</span></div>
+      <div class="stat"><b>3 portal</b><span>JobStreet, Glints, LinkedIn Indonesia</span></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Cara kerja</h2>
+    <div class="lede">Empat langkah. Kamu tidak mengisi form berulang.</div>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><b>Ceritakan maumu</b><p>Contoh: admin di Bandung, gaji minimal 5 juta. Agen menampilkan yang cocok lengkap dengan skor dan nama perusahaan.</p></div>
+      <div class="step"><div class="n">02</div><b>Belum punya CV? Agen yang susun</b><p>Jawab pertanyaan singkat di chat, agen menyusun CV PDF rapi yang siap lolos ATS. Sudah punya? Unggah, langsung dipakai.</p></div>
+      <div class="step"><div class="n">03</div><b>Pilih cara melamar</b><p>Otomatis semua untuk jalur tanpa login (email, form perusahaan), atau ketuk satu per satu untuk LinkedIn dan JobStreet.</p></div>
+      <div class="step"><div class="n">04</div><b>Pantau progresnya</b><p>Setiap lamaran berstatus jelas: antre, dikerjakan, terkirim. Ringkasan harian masuk WhatsApp.</p></div>
+    </div>
+    <div class="chat-pill"><div class="chat-row">
+      <input type="text" placeholder="Contoh: carikan kerja admin di Bandung, gaji minimal 5 juta">
+      <button class="send-btn">Kirim</button>
+    </div></div>
+  </section>
+
+  <section class="block">
+    <h2>Bukti, bukan janji</h2>
+    <div class="lede">Contoh tampilan progres nyata di dashboard user.</div>
+    <div class="proof">
+      <div class="shot"><div class="cap">Minggu pertama</div><div class="big">23 lamaran terkirim</div><p>14 otomatis via email dan form perusahaan, 9 satu ketukan via JobStreet. Skor rata-rata 4,3.</p><div class="bar"><i></i></div></div>
+      <div class="shot"><div class="cap">Hasil</div><div class="big">2 panggilan interview</div><p>Staff Administrasi PT Maju Bersama dan Admin Gudang CV Sinar Abadi. Keduanya dari antrean otomatis.</p></div>
+    </div>
+    <div class="marquee-mask"><div class="marquee" id="marquee"></div></div>
+  </section>
+
+  <section class="block">
+    <h2>Harga</h2>
+    <div class="lede">Lihat dan cari gratis. Bayar hanya saat melamar.</div>
+    <div class="price-cards">
+      <div class="price"><b>Lihat-lihat</b><div class="rp">Rp0 <span>selamanya</span></div>
+        <ul><li>Cari dan lihat skor</li><li>Nama perusahaan terlihat</li><li>Tanpa tombol lamar</li></ul></div>
+      <div class="price hot"><b>Paket Coba</b><div class="rp">Rp25rb <span>/ 20 lamaran</span></div>
+        <ul><li>20 lamaran, 30 hari</li><li>Kirim sendiri pilihannya</li><li>Semua portal</li><li>Bayar via WhatsApp</li></ul></div>
+      <div class="price"><b>Bulanan</b><div class="rp">Rp49rb <span>/ bulan</span></div>
+        <ul><li>60 lamaran auto-blast per bulan</li><li>Semua portal</li><li>Pilih sendiri yang mau dikirim</li><li>Ringkasan WA harian</li></ul></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Pertanyaan umum</h2>
+    <div class="faq">
+      <div class="qa"><b>Apakah saya harus kasih password JobStreet atau LinkedIn?</b><p>Ya untuk mode otomatis penuh. Kredensialmu disimpan terenkripsi, tidak pernah ditampilkan kembali, dan bisa dihapus kapan saja. Kalau tidak mau, pakai mode 1-klik tanpa simpan password.</p></div>
+      <div class="qa"><b>Apakah CV saya diubah-ubah?</b><p>Tidak. CV dipakai apa adanya. Belum punya CV? Jawab pertanyaan agen di chat (pendidikan, pengalaman, keahlian), agen menyusunnya menjadi CV PDF rapi yang siap lolos ATS.</p></div>
+      <div class="qa"><b>Bagaimana cara bayar?</b><p>Chat nomor WhatsApp admin, transfer, kirim bukti. Akun diaktifkan manual di jam kerja. Tanpa kartu kredit.</p></div>
+      <div class="qa"><b>Kalau tidak dapat panggilan?</b><p>Paket Coba 20 lamaran cukup untuk menguji. Kalau skor cocokmu selalu di bawah 3,5, agen akan bilang terus terang bahwa targetmu perlu diturunkan, bukan menyedot lamaranmu.</p></div>
+    </div>
+  </section>
+  <footer>myagents &middot; myagenst.id &middot; Sekpri digital pencari kerja</footer>
+</div>
+<script>
+  var portals = ["JobStreet","Glints","LinkedIn","Kalibrr","Jobindo","Karir.com","Urbanhire","Pintarnya"];
+  var h = ""; for (var r = 0; r < 2; r++) portals.forEach(function(p){ h += '<span class="portal">'+p+'</span>'; });
+  document.getElementById("marquee").innerHTML = h;
+  document.getElementById("themeBtn").onclick = function(){
+    var l = document.body.classList.toggle("light"); this.innerHTML = l ? "&#9788;" : "&#9790;";
+  };
+</script>
+</body>
+</html>

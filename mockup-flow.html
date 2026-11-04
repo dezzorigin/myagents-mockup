@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow Fitur — myagents</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root { --bg:#050505; --surface:#0a0a0a; --card:#111111;
+    --border:rgba(255,255,255,0.08); --t1:#fafafa; --t2:#a1a1aa; --t3:#52525b;
+    --btn-bg:#fafafa; --btn-tx:#000; }
+  body.light { --bg:#f4f4f5; --surface:#ffffff; --card:#ffffff;
+    --border:rgba(0,0,0,0.09); --t1:#09090b; --t2:#52525b; --t3:#b0b0b8;
+    --btn-bg:#09090b; --btn-tx:#fff; }
+  body { background:var(--bg); color:var(--t1);
+    font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif; min-height:100vh; }
+  .wrap { max-width:960px; margin:0 auto; padding:110px 20px 90px; }
+  header { position:fixed; top:24px; left:50%; transform:translateX(-50%); z-index:40;
+    width:92%; max-width:760px; background:var(--surface);
+    border:1px solid var(--border); border-radius:9999px;
+    padding:10px 22px; display:flex; align-items:center; justify-content:space-between; }
+  .brand { display:flex; align-items:center; gap:8px; font-weight:800; font-size:14px; }
+  .brand-dot { width:26px; height:26px; border-radius:50%; background:var(--btn-bg); color:var(--btn-tx);
+    display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; }
+  nav.links { display:flex; gap:4px; }
+  nav.links a { color:var(--t2); text-decoration:none; font-size:13px; font-weight:500; padding:6px 12px; border-radius:8px; }
+  .icon-btn { background:transparent; border:1px solid var(--border); color:var(--t2);
+    border-radius:50%; width:36px; height:36px; cursor:pointer; font-size:15px; }
+  h1 { font-size:30px; font-weight:800; letter-spacing:-0.03em; text-align:center; }
+  .lede { color:var(--t2); font-size:14px; text-align:center; margin-top:8px; }
+  .flow { margin-top:28px; display:grid; grid-template-columns:300px 1fr; gap:14px; align-items:start; }
+  .steps { display:flex; flex-direction:column; gap:0; }
+  .step { display:flex; gap:12px; cursor:pointer; padding:12px; border-radius:16px; border:1px solid transparent; }
+  .step.sel { background:var(--surface); border-color:var(--border); }
+  .step .n { width:30px; height:30px; border-radius:50%; border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0; }
+  .step.sel .n { background:var(--t1); color:var(--bg); border-color:var(--t1); }
+  .step b { font-size:13.5px; display:block; }
+  .step span { color:var(--t2); font-size:12px; display:block; margin-top:2px; }
+  .step .line { width:2px; background:var(--border); margin:0 0 0 26px; height:14px; }
+  .detail { background:var(--surface); border:1px solid var(--border); border-radius:22px;
+    padding:26px; position:sticky; top:110px; }
+  .detail .tag { font-size:11px; color:var(--t3); font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+  .detail h2 { font-size:20px; margin-top:6px; }
+  .detail p { color:var(--t2); font-size:13.5px; margin-top:10px; line-height:1.65; }
+  .detail ul { margin:12px 0 0 18px; color:var(--t2); font-size:13px; line-height:1.8; }
+  .pay { color:var(--t1); font-weight:700; }
+  footer { margin-top:40px; text-align:center; color:var(--t3); font-size:12px; }
+  @media (max-width:720px) { nav.links { display:none; } .flow { grid-template-columns:1fr; } .detail { position:static; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="brand-dot">m</div>myagents</div>
+  <nav class="links"><a href="mockup-landing.html">Landing</a><a href="mockup-dashboard.html">Dashboard</a><a href="#">Flow</a></nav>
+  <button class="icon-btn" id="themeBtn">&#9790;</button>
+</header>
+<div class="wrap">
+  <h1>Flow fitur, ujung ke ujung</h1>
+  <div class="lede">Klik tiap langkah untuk melihat detail. Tanpa login di depan, tanpa password portal.</div>
+  <div class="flow">
+    <div class="steps" id="steps"></div>
+    <div class="detail" id="detail"></div>
+  </div>
+  <footer>myagents &middot; myagenst.id</footer>
+</div>
+<script>
+  var data = [
+    {t:"Chat tanpa akun", s:"Gratis, tanpa daftar", d:"User membuka landing dan langsung chat. Agen menjawab dengan jumlah cocok, skor, dan nama perusahaan. Belum ada akun, belum ada komitmen. Tujuannya satu: dopamin dalam 60 detik pertama.",
+     u:["Rate limit 20 pencarian per hari per perangkat","Skor dan nama perusahaan terlihat penuh","Tombol Lamar terkunci, memicu sheet bayar"]},
+    {t:"Daftar: nama + WA + PIN", s:"30 detik, tanpa email", d:"Pendaftaran baru muncul saat user menekan Lamar atau Unggah CV. Tiga field saja. Nomor WA menjadi identitas anti-fraud: satu nomor satu akun.",
+     u:["PIN 6 digit buatan sendiri, tanpa OTP berbayar","CV PDF diunggah di langkah ini","Akun langsung aktif tier Lihat-lihat (Rp0)"]},
+    {t:"CV builder (kalau belum punya)", s:"Jawab chat, dapat PDF ATS", d:"User yang belum punya CV menjawab pertanyaan agen: pendidikan, pengalaman, keahlian. Data disusun menjadi struktur YAML RenderCV, lalu dirender menjadi PDF rapi dengan tema ATS-friendly. Sudah punya CV cukup unggah PDF.",
+    u:["Mesin RenderCV (MIT) di worker: YAML ke PDF","Tema sederhana untuk fresh graduate","Sudah punya CV? Langkah ini dilewati"]},
+    {t:"Konfirmasi mode di chat", s:"Otomatis / 1-klik", d:"Agen menampilkan dua angka: berapa yang bisa dilamar otomatis (jalur tanpa login) dan berapa yang butuh satu ketukan. User memilih per sesi pencarian.",
+     u:["Otomatis: email HRD dan form perusahaan","1-klik: deep link ke halaman apply portal","Pilihan bisa diubah kapan saja"]},
+    {t:"Kredensial portal (opsional)", s:"Sekali isi, terenkripsi", d:"Untuk auto-blast penuh, user mengisi username dan password portalnya di halaman Kredensial: JobStreet, Glints, LinkedIn. Disimpan terenkripsi, tidak pernah tampil kembali, bisa dihapus kapan saja. Yang tidak mau, tetap bisa pakai mode 1-klik tanpa simpan apa pun.",
+     u:["Enkripsi at-rest, tidak pernah di-show balik","Centang persetujuan risiko per portal","2FA terdeteksi: agen minta kode via chat"]},
+    {t:"Trigger bayar", s:"Di momen niat tertinggi", d:"Aksi berbayar apa pun membuka sheet: Paket Coba Rp25rb/20, Bulanan Rp49rb/60 auto-blast, Beta Rp10rb untuk 10 orang pertama. Bayar via WhatsApp, aktivasi manual jam kerja.",
+     u:["Tidak ada halaman harga yang harus dicari","Bukti transfer via chat WA ke admin","Admin flip status di dashboard internal"]},
+    {t:"Worker blast malam hari", s:"20.00-23.00, on-demand", d:"Antrean di Supabase dikerjakan worker di PC. Tiap JD diskor, difilter preferensi, lalu dilamar sesuai antreannya. Batas 20 per hari per portal melindungi akun user.",
+     u:["Klasifikasi jalur apply per lowongan","Dedup dan deteksi repost otomatis","Gagal login form dicatat + alasan"]},
+    {t:"Tracking + notif WA", s:"Dashboard + ringkasan pagi", d:"Status tiap lamaran: antre, dikerjakan, terkirim, gagal, panggilan. Ringkasan harian dikirim ke WhatsApp user. Follow-up otomatis hari ke-7 untuk yang tanpa kabar.",
+     u:["Tab filter per status","Detail tiap lamaran: kapan, lewat jalur apa","Tombol siapkan interview saat ada panggilan"]},
+    {t:"Testimoni balik", s:"Syarat paket beta", d:"Saat user lapor dapat panggilan, agen meminta screenshot sebagai testimoni. Testimoni menjadi bukti di landing page untuk meyakinkan pembeli berikutnya.",
+     u:["Beta Rp10rb wajib testimoni","Referral teman seangkatan: bonus 5 lamaran","Loop tertutup: bukti menghasilkan pembeli"]}
+  ];
+  var stepsEl = document.getElementById("steps"), detailEl = document.getElementById("detail");
+  data.forEach(function(s, i){
+    var d = document.createElement("div"); d.className = "step" + (i === 0 ? " sel" : "");
+    d.innerHTML = '<div class="n">' + (i+1) + '</div><div><b>' + s.t + '</b><span>' + s.s + '</span></div>';
+    d.onclick = function(){ select(i); };
+    stepsEl.appendChild(d);
+  });
+  function select(i){
+    var all = stepsEl.children;
+    for (var k = 0; k < all.length; k++) all[k].classList.remove("sel");
+    all[i].classList.add("sel");
+    var s = data[i], h = '<div class="tag">Langkah ' + (i+1) + ' dari ' + data.length + '</div><h2>' + s.t + '</h2><p>' + s.d + '</p><ul>';
+    s.u.forEach(function(x){ h += "<li>" + x + "</li>"; });
+    detailEl.innerHTML = h + "</ul>";
+  }
+  select(0);
+  document.getElementById("themeBtn").onclick = function(){
+    var l = document.body.classList.toggle("light"); this.innerHTML = l ? "&#9788;" : "&#9790;";
+  };
+</script>
+</body>
+</html>
