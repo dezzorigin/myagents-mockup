@@ -1,15 +1,34 @@
 # Myagents Mockup
 
-Myagents Mockup project.
+Myagents Mockup — project by Nabil Aulia Dika (dezzorigin).
 
-## Tech stack
+## Status Proyek
 
-HTML/CSS/JS
+**Dalam pengembangan** _(README ada)_
 
-## Getting started
+## Tech Stack
 
-See project files for setup instructions.
+HTML/CSS/JavaScript
 
-## License
+## Struktur Proyek
 
-MIT
+```
+.gitignore
+FLOW.md
+README.md
+mockup-dashboard.html
+mockup-flow.html
+mockup-landing.html
+mockup-v1.html
+```
+
+## Getting Started
+
+Buka file `index.html` di browser, atau serve folder dengan static server.
+
+## Lisensi
+
+MIT — lihat file [LICENSE](./LICENSE).
+
+---
+_Dibuat dan dikelola oleh Nabil Aulia Dika. Kontribusi dan issue welcome._
